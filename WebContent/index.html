@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Sample Page</title>
+</head>
+<body>
+<p>Click the button to trigger a function that will output response from Arduino in a p element with id="demo".</p>
+<button onclick="getCall()">GET</button>
+<button onclick="postCall()">Post</button>
+
+<p id="demo"></p>
+
+<script>
+function getCall() {	 
+	var xmlHttp = new XMLHttpRequest();
+	var params = "?button=GET&data=1";
+	var url = "http://localhost:8080/SerialCloud/connector";
+    xmlHttp.open( "GET", url+params, true ); // false for synchronous request
+    xmlHttp.onreadystatechange = function() {//Call a function when the state changes.
+    	if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+    		alert(xmlHttp.responseText);
+    		document.getElementById("demo").innerHTML = xmlHttp.responseText;
+    	}
+    }
+    xmlHttp.send( null );
+    //return xmlHttp.responseText;
+    
+}
+
+function postCall(){
+	var xhr = new XMLHttpRequest();
+	var params = "button=POST&data=1";
+	xhr.open("POST", "http://localhost:8080/SerialCloud/connector", true);
+	
+	//Send the proper header information along with the request
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	xhr.setRequestHeader("Content-length", params.length);
+	xhr.setRequestHeader("Connection", "close");
+	
+	xhr.onreadystatechange = function() {//Call a function when the state changes.
+	    if(xhr.readyState == 4 && xhr.status == 200) {
+	        alert(xhr.responseText);
+	        document.getElementById("demo").innerHTML = xmlHttp.responseText;
+	    }
+	}
+	xhr.send(params);
+
+	
+	
+}
+</script>
+
+</body>
+</html>
